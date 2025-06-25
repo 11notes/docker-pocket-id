@@ -1,4 +1,4 @@
-${{ content_synopsis }} This image will run pocket-id rootless and distroless, for maximum security. It also contains a quick fix<sup>1</sup> to quiet done the logging of gin.
+${{ content_synopsis }} This image will run pocket-id rootless and distroless, for maximum security. It also contains a quick fix[^1] to quiet done the logging of gin.
 
 ${{ github:> [!IMPORTANT] }}
 ${{ github:> }}* This image runs as 1000:1000 by default, most other images run everything as root
@@ -29,5 +29,4 @@ ${{ content_built }}
 
 ${{ content_tips }}
 
-# DISCLAIMERS
-* <sup>1</sup> [PR](https://github.com/pocket-id/pocket-id/pull/679)
+[^1]: A [PR](https://github.com/pocket-id/pocket-id/pull/679) was added to resolve this issue upstream
