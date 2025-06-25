@@ -29,4 +29,4 @@ ${{ content_built }}
 
 ${{ content_tips }}
 
-[^1]: A [PR](https://github.com/pocket-id/pocket-id/pull/679) was added to resolve this issue upstream
+[^1]: A [PR](https://github.com/pocket-id/pocket-id/pull/681) was added to resolve this issue upstream
