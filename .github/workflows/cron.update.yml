@@ -22,8 +22,7 @@ jobs:
 
       - name: cron-update / get latest version
         run: |
-          echo "LATEST_VERSION=$(curl -s https://api.github.com/repos/userdocs/qbittorrent-nox-static/releases/latest | jq -r '.tag_name' | sed 's/release-//' | sed 's/_v.*//')" >> "${GITHUB_ENV}"
-          echo "LATEST_LIBTORRENT_VERSION=$(curl -s https://api.github.com/repos/userdocs/qbittorrent-nox-static/releases/latest | jq -r '.tag_name' | sed 's/release-.*_v//')" >> "${GITHUB_ENV}"
+          echo "LATEST_VERSION=$(curl -s https://api.github.com/repos/pocket-id/pocket-id/releases/latest | jq -r '.tag_name' | sed 's/v//')" >> "${GITHUB_ENV}"
           echo "LATEST_TAG=$(git describe --abbrev=0 --tags `git rev-list --tags --max-count=1` | sed 's/v//')" >> "${GITHUB_ENV}"
 
       - name: cron-update / setup node
@@ -39,7 +38,6 @@ jobs:
             const { existsSync, readFileSync, writeFileSync } = require('node:fs');
             const { resolve } = require('node:path');
             const { inspect } = require('node:util');
-            const { Buffer } = require('node:buffer');
             const semver = require('semver')
             const repository = {dot:{}};
 
@@ -73,21 +71,9 @@ jobs:
                 repository.dot.semver.latest = repository.dot.semver.version;
               }
 
-              if(repository.dot?.readme?.comparison?.image){
-                repository.dot.readme.comparison.image = repository.dot.readme.comparison.image.replace(current, repository.dot.semver.version);
-              }
-
               try{
                 writeFileSync(resolve('.json'), JSON.stringify(repository.dot, null, 2));
                 core.exportVariable('WORKFLOW_AUTO_UPDATE', true);
-                const etc = {
-                  build:{
-                    args:{
-                      LIBTORRENT_VERSION = '${{ env.LATEST_LIBTORRENT_VERSION }}';
-                    }
-                  },
-                };
-                core.exportVariable('WORKFLOW_BASE64JSON', Buffer.from(JSON.stringify(etc)).toString('base64'));
               }catch(e){
                 core.setFailed(e);
               }
@@ -121,5 +107,5 @@ jobs:
           workflow: docker.yml
           wait-for-completion: false
           token: "${{ secrets.REPOSITORY_TOKEN }}"
-          inputs: '{ "release":"true", "readme":"true", "etc":"${{ env.WORKFLOW_BASE64JSON }}" }'
+          inputs: '{ "release":"true", "readme":"true" }'
           ref: "v${{ env.WORKFLOW_NEW_TAG }}"
