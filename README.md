@@ -159,9 +159,9 @@ docker pull quay.io/11notes/pocket-id:1.4.1
 >* Use a reverse proxy like Traefik, Nginx, HAproxy to terminate TLS and to protect your endpoints
 >* Use Let’s Encrypt DNS-01 challenge to obtain valid SSL certificates for your services
 
-[^1]: A [PR](https://github.com/pocket-id/pocket-id/pull/679) was added to resolve this issue upstream
+[^1]: A [PR](https://github.com/pocket-id/pocket-id/pull/681) was added to resolve this issue upstream
 
 # ElevenNotes™️
 This image is provided to you at your own risk. Always make backups before updating an image to a different version. Check the [releases](https://github.com/11notes/docker-pocket-id/releases) for breaking changes. If you have any problems with using this image simply raise an [issue](https://github.com/11notes/docker-pocket-id/issues), thanks. If you have a question or inputs please create a new [discussion](https://github.com/11notes/docker-pocket-id/discussions) instead of an issue. You can find all my other repositories on [github](https://github.com/11notes?tab=repositories).
 
-*created 25.06.2025, 13:02:41 (CET)*
+*created 26.06.2025, 00:00:01 (CET)*
