@@ -44,9 +44,9 @@
   RUN set -ex; \
     # fix zealous logging, PR was added upstream: https://github.com/pocket-id/pocket-id/pull/681
     cd ${BUILD_ROOT}/backend; \
-    sed -i 's#import (#import (\n\t"strings"\n\t"regexp"#' ${BUILD_ROOT}/backend/internal/bootstrap/router_bootstrap.go; \
-    sed -i 's#r := gin.Default()#r := gin.New()\n\tloggerSkipPathsRegExp := []*regexp.Regexp{regexp.MustCompile(`\/api\/application-configuration.*`),regexp.MustCompile(`\/_app\/.*`),regexp.MustCompile(`\/fonts/.*`),}#' ${BUILD_ROOT}/backend/internal/bootstrap/router_bootstrap.go; \
-    sed -i 's#r.Use(gin.Logger())#r.Use(gin.LoggerWithConfig(gin.LoggerConfig{Skip:func(c *gin.Context) bool {for _, path := range loggerSkipPathsRegExp {if path.MatchString(c.Request.URL.String()) {return true}}; return strings.Split(c.Request.RemoteAddr, ":")[0] == "127.0.0.1"}}))#' ${BUILD_ROOT}/backend/internal/bootstrap/router_bootstrap.go; \
+    sed -i 's#import (#import (\n\t"strings"#' ${BUILD_ROOT}/backend/internal/bootstrap/router_bootstrap.go; \
+    sed -i 's#r := gin.Default()#r := gin.New()\n\tloggerSkipPathsPrefix := []string{"GET /api/application-configuration","GET /_app","GET /fonts","HEAD /healthz",}#' ${BUILD_ROOT}/backend/internal/bootstrap/router_bootstrap.go; \
+    sed -i 's#r.Use(gin.Logger())#r.Use(gin.LoggerWithConfig(gin.LoggerConfig{Skip:func(c *gin.Context) bool {for _, prefix := range loggerSkipPathsPrefix {if strings.HasPrefix(fmt.Sprintf("%s %s", c.Request.Method, c.Request.URL.String()), prefix){return true}}; return false}}))#' ${BUILD_ROOT}/backend/internal/bootstrap/router_bootstrap.go; \
     go mod tidy;
 
   RUN set -ex; \
@@ -112,7 +112,7 @@
 
 # :: HEALTH
   HEALTHCHECK --interval=5s --timeout=2s --start-interval=5s \
-    CMD ["/usr/local/bin/curl", "-kILs", "--fail", "http://localhost:1411/healthz"]
+    CMD ["/usr/local/bin/curl", "-kILs", "--fail", "http://localhost:1411/healthz/"]
 
 # :: EXECUTE
   USER ${APP_UID}:${APP_GID}
