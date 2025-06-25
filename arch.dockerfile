@@ -47,7 +47,6 @@
     sed -i 's#import (#import (\n\t"strings"#' ${BUILD_ROOT}/backend/internal/bootstrap/router_bootstrap.go; \
     sed -i 's#r := gin.Default()#r := gin.New()#' ${BUILD_ROOT}/backend/internal/bootstrap/router_bootstrap.go; \
     sed -i 's#r.Use(gin.Logger())#r.Use(gin.LoggerWithConfig(gin.LoggerConfig{Skip:func(c *gin.Context) bool { return strings.Split(c.Request.RemoteAddr, ":")[0] == "127.0.0.1" }}))#' ${BUILD_ROOT}/backend/internal/bootstrap/router_bootstrap.go; \
-    cat ${BUILD_ROOT}/backend/internal/bootstrap/router_bootstrap.go; \
     go mod tidy;
 
   RUN set -ex; \

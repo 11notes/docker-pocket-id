@@ -2,7 +2,6 @@
   "image": "11notes/pocket-id",
   "name": "pocket-id",
   "root": "/pocket-id",
-  "arch":"linux/amd64,linux/arm64,linux/arm/v7",
   "semver": {
     "version": "1.4.1"
   },
