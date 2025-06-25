@@ -10,7 +10,7 @@ Run pocket-id rootless and distroless.
 Pocket ID is a simple OIDC provider that allows users to authenticate with their passkeys to your services.
 
 # SYNOPSIS 📖
-**What can I do with this?** This image will run pocket-id rootless and distroless, for maximum security. It also contains a quick fix<sup>1</sup> to quiet done the logging of gin.
+**What can I do with this?** This image will run pocket-id rootless and distroless, for maximum security. It also contains a quick fix[^1] to quiet done the logging of gin.
 
 > [!IMPORTANT]
 >* This image runs as 1000:1000 by default, most other images run everything as root
@@ -159,10 +159,9 @@ docker pull quay.io/11notes/pocket-id:1.4.1
 >* Use a reverse proxy like Traefik, Nginx, HAproxy to terminate TLS and to protect your endpoints
 >* Use Let’s Encrypt DNS-01 challenge to obtain valid SSL certificates for your services
 
-# DISCLAIMERS
-* <sup>1</sup> [PR](https://github.com/pocket-id/pocket-id/pull/679)
+[^1]: A [PR](https://github.com/pocket-id/pocket-id/pull/679) was added to resolve this issue upstream
 
 # ElevenNotes™️
 This image is provided to you at your own risk. Always make backups before updating an image to a different version. Check the [releases](https://github.com/11notes/docker-pocket-id/releases) for breaking changes. If you have any problems with using this image simply raise an [issue](https://github.com/11notes/docker-pocket-id/issues), thanks. If you have a question or inputs please create a new [discussion](https://github.com/11notes/docker-pocket-id/discussions) instead of an issue. You can find all my other repositories on [github](https://github.com/11notes?tab=repositories).
 
-*created 25.06.2025, 12:31:57 (CET)*
+*created 25.06.2025, 13:01:12 (CET)*
