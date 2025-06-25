@@ -1,0 +1,25 @@
+{
+  "image": "11notes/pocket-id",
+  "name": "pocket-id",
+  "root": "/pocket-id",
+  "arch":"linux/amd64,linux/arm64,linux/arm/v7",
+  "semver": {
+    "version": "1.4.1"
+  },
+  "readme": {
+    "description": "Run pocket-id rootless and distroless.",
+    "introduction":"Pocket ID is a simple OIDC provider that allows users to authenticate with their passkeys to your services.",
+    "built": {
+      "pocket-id/pocket-id": "https://github.com/pocket-id/pocket-id"
+    },
+    "distroless": {
+      "layers": [
+        "11notes/distroless",
+        "11notes/distroless:curl"
+      ]
+    },
+    "comparison": {
+      "image": "ghcr.io/pocket-id/pocket-id"
+    }
+  }
+}
