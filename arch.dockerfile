@@ -45,8 +45,8 @@
     # fix zealous logging, PR was added upstream: https://github.com/pocket-id/pocket-id/pull/681
     cd ${BUILD_ROOT}/backend; \
     sed -i 's#import (#import (\n\t"strings"#' ${BUILD_ROOT}/backend/internal/bootstrap/router_bootstrap.go; \
-    sed -i 's#r := gin.Default()#r := gin.New()\n\tloggerSkipPathsPrefix := []string{"GET /api/application-configuration","GET /_app","GET /fonts","HEAD /healthz",}#' ${BUILD_ROOT}/backend/internal/bootstrap/router_bootstrap.go; \
-    sed -i 's#r.Use(gin.Logger())#r.Use(gin.LoggerWithConfig(gin.LoggerConfig{Skip:func(c *gin.Context) bool {for _, prefix := range loggerSkipPathsPrefix {if strings.HasPrefix(fmt.Sprintf("%s %s", c.Request.Method, c.Request.URL.String()), prefix){return true}}; return false}}))#' ${BUILD_ROOT}/backend/internal/bootstrap/router_bootstrap.go; \
+    sed -i 's#r := gin.Default()#r := gin.New()\n\tloggerSkipPathsPrefix := []string{"GET /api/application-configuration","GET /_app","GET /fonts","HEAD /healthz","GET /healthz",}#' ${BUILD_ROOT}/backend/internal/bootstrap/router_bootstrap.go; \
+    sed -i 's#r.Use(gin.Logger())#r.Use(gin.LoggerWithConfig(gin.LoggerConfig{Skip:func(c *gin.Context) bool {for _, prefix := range loggerSkipPathsPrefix {if strings.HasPrefix(c.Request.Method + " " + c.Request.URL.String(), prefix){return true}}; return false}}))#' ${BUILD_ROOT}/backend/internal/bootstrap/router_bootstrap.go; \
     go mod tidy;
 
   RUN set -ex; \
