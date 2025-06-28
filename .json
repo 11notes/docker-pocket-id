@@ -3,11 +3,11 @@
   "name": "pocket-id",
   "root": "/pocket-id",
   "semver": {
-    "version": "1.4.1"
+    "version": "1.5.0"
   },
   "readme": {
     "description": "Run pocket-id rootless and distroless.",
-    "introduction":"Pocket ID is a simple OIDC provider that allows users to authenticate with their passkeys to your services.",
+    "introduction": "Pocket ID is a simple OIDC provider that allows users to authenticate with their passkeys to your services.",
     "built": {
       "pocket-id/pocket-id": "https://github.com/pocket-id/pocket-id"
     },
