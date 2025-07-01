@@ -10,14 +10,14 @@
   # :: FOREIGN IMAGES
   FROM 11notes/distroless AS distroless
   FROM 11notes/distroless:curl AS distroless-curl
-  FROM 11notes/util AS util
+  FROM 11notes/util:bin AS util
 
 # ╔═════════════════════════════════════════════════════╗
 # ║                       BUILD                         ║
 # ╚═════════════════════════════════════════════════════╝
   # :: pocket-id
   FROM golang:1.24-alpine AS build
-  COPY --from=util /usr/local/bin /usr/local/bin
+  COPY --from=util / /
   ARG APP_VERSION \
       BUILD_ROOT \
       BUILD_BIN
