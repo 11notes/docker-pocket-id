@@ -42,20 +42,13 @@
     BUILD_OUTPUT_PATH=dist npm run build;
 
   RUN set -ex; \
-    # fix zealous logging, PR was added upstream: https://github.com/pocket-id/pocket-id/pull/681
-    cd ${BUILD_ROOT}/backend; \
-    sed -i 's#import (#import (\n\t"strings"#' ${BUILD_ROOT}/backend/internal/bootstrap/router_bootstrap.go; \
-    sed -i 's#r := gin.Default()#r := gin.New()\n\tloggerSkipPathsPrefix := []string{"GET /api/application-configuration","GET /_app","GET /fonts","HEAD /healthz","GET /healthz",}#' ${BUILD_ROOT}/backend/internal/bootstrap/router_bootstrap.go; \
-    sed -i 's#r.Use(gin.Logger())#r.Use(gin.LoggerWithConfig(gin.LoggerConfig{Skip:func(c *gin.Context) bool {for _, prefix := range loggerSkipPathsPrefix {if strings.HasPrefix(c.Request.Method + " " + c.Request.URL.String(), prefix){return true}}; return false}}))#' ${BUILD_ROOT}/backend/internal/bootstrap/router_bootstrap.go; \
-    go mod tidy;
-
-  RUN set -ex; \
     cd ${BUILD_ROOT}/backend/cmd; \
     cp -R ${BUILD_ROOT}/frontend/dist ${BUILD_ROOT}/backend/frontend/dist; \
     go build -trimpath -ldflags="-X github.com/pocket-id/pocket-id/backend/internal/common.Version=${APP_VERSION} -buildid=${APP_VERSION} -extldflags=-static" -o ${BUILD_BIN} main.go;
 
   RUN set -ex; \
     mkdir -p /distroless/usr/local/bin; \
+    chmod +x ${BUILD_BIN}; \
     eleven checkStatic ${BUILD_BIN}; \
     eleven strip ${BUILD_BIN}; \
     chmod +x ${BUILD_BIN}; \

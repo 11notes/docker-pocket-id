@@ -4,7 +4,7 @@ on:
     tags:
       - 'v*'
 jobs:
-  docker:
+  tags:
     runs-on: ubuntu-latest
     steps:   
       - name: build docker image
