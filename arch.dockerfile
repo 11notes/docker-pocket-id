@@ -47,12 +47,7 @@
     go build -trimpath -ldflags="-X github.com/pocket-id/pocket-id/backend/internal/common.Version=${APP_VERSION} -buildid=${APP_VERSION} -extldflags=-static" -o ${BUILD_BIN} main.go;
 
   RUN set -ex; \
-    mkdir -p /distroless/usr/local/bin; \
-    chmod +x ${BUILD_BIN}; \
-    eleven checkStatic ${BUILD_BIN}; \
-    eleven strip ${BUILD_BIN}; \
-    chmod +x ${BUILD_BIN}; \
-    cp ${BUILD_BIN} /distroless/usr/local/bin;
+    eleven distroless ${BUILD_BIN};
 
   # :: file system
   FROM alpine AS file-system
