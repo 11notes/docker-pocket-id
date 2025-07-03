@@ -10,14 +10,15 @@
   # :: FOREIGN IMAGES
   FROM 11notes/distroless AS distroless
   FROM 11notes/distroless:curl AS distroless-curl
-  FROM 11notes/util:bin AS util
+  FROM 11notes/util:bin AS util-bin
+  FROM 11notes/util AS util
 
 # ╔═════════════════════════════════════════════════════╗
 # ║                       BUILD                         ║
 # ╚═════════════════════════════════════════════════════╝
   # :: pocket-id
   FROM golang:1.24-alpine AS build
-  COPY --from=util / /
+  COPY --from=util-bin / /
   ARG APP_VERSION \
       BUILD_ROOT \
       BUILD_BIN
@@ -26,8 +27,6 @@
 
   RUN set -ex; \
     apk --update --no-cache add \
-      build-base \
-      upx \
       nodejs \
       npm \
       yarn \
@@ -51,7 +50,7 @@
 
   # :: file system
   FROM alpine AS file-system
-  COPY --from=util /usr/local/bin /usr/local/bin
+  COPY --from=util / /
   ARG APP_ROOT
   USER root
   RUN set -ex; \
