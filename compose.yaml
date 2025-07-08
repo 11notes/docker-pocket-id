@@ -26,7 +26,7 @@ services:
         condition: "service_healthy"
         restart: true
     read_only: true
-    image: "11notes/pocket-id:1.5.0"
+    image: "11notes/pocket-id:1.6.1"
     environment:
       TZ: "Europe/Zurich"
       APP_URL: "${FQDN}"
