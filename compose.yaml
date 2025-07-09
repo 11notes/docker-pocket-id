@@ -11,9 +11,9 @@ services:
     networks:
       backend:
     volumes:
-      - "etc:/postgres/etc"
-      - "var:/postgres/var"
-      - "backup:/postgres/backup"
+      - "db.etc:/postgres/etc"
+      - "db.var:/postgres/var"
+      - "db.backup:/postgres/backup"
     tmpfs:
       # needed for read-only
       - "/postgres/run:uid=1000,gid=1000"
@@ -47,7 +47,6 @@ volumes:
   db.etc:
   db.var:
   db.backup:
-  db.cmd:
 
 networks:
   frontend:
