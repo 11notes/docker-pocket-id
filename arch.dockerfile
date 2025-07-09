@@ -4,12 +4,12 @@
   # GLOBAL
   ARG APP_UID=1000 \
       APP_GID=1000 \
-      BUILD_ROOT=/go/pocket-id \
-      BUILD_BIN=/go/pocket-id/backend/pocket-id
+      BUILD_SRC=https://github.com/pocket-id/pocket-id.git \
+      BUILD_ROOT=/go/pocket-id 
+  ARG BUILD_BIN=${BUILD_ROOT}/backend/pocket-id
 
   # :: FOREIGN IMAGES
   FROM 11notes/distroless AS distroless
-  FROM 11notes/distroless:curl AS distroless-curl
   FROM 11notes/util:bin AS util-bin
   FROM 11notes/util AS util
 
@@ -20,10 +20,10 @@
   FROM golang:1.24-alpine AS build
   COPY --from=util-bin / /
   ARG APP_VERSION \
+      BUILD_SRC \
       BUILD_ROOT \
-      BUILD_BIN
-
-  ENV CGO_ENABLED=0
+      BUILD_BIN \
+      CGO_ENABLED=0
 
   RUN set -ex; \
     apk --update --no-cache add \
@@ -33,7 +33,7 @@
       git;
 
   RUN set -ex; \
-    git clone https://github.com/pocket-id/pocket-id -b v${APP_VERSION};
+    git clone ${BUILD_SRC} -b v${APP_VERSION};
 
   RUN set -ex; \
     cd ${BUILD_ROOT}/frontend; \
@@ -90,7 +90,6 @@
 
   # :: multi-stage
     COPY --from=distroless / /
-    COPY --from=distroless-curl / /
     COPY --from=build /distroless/ /
     COPY --from=file-system --chown=${APP_UID}:${APP_GID} /distroless/ /
 
@@ -99,7 +98,7 @@
 
 # :: HEALTH
   HEALTHCHECK --interval=5s --timeout=2s --start-interval=5s \
-    CMD ["/usr/local/bin/curl", "-kILs", "--fail", "http://localhost:1411/healthz/"]
+    CMD ["/usr/local/bin/pocket-id", "healthcheck"]
 
 # :: EXECUTE
   USER ${APP_UID}:${APP_GID}
