@@ -31,7 +31,7 @@ Below you find a comparison between this image and the most used or original one
 
 | **image** | 11notes/pocket-id:1.6.1 | ghcr.io/pocket-id/pocket-id |
 | ---: | :---: | :---: |
-| **image size on disk** | 20.8MB | 69.9MB |
+| **image size on disk** | 14.7MB | 69.9MB |
 | **process UID/GID** | 1000/1000 | 0/0 |
 | **distroless?** | ✅ | ❌ |
 | **rootless?** | ✅ | ❌ |
@@ -55,9 +55,9 @@ services:
     networks:
       backend:
     volumes:
-      - "etc:/postgres/etc"
-      - "var:/postgres/var"
-      - "backup:/postgres/backup"
+      - "db.etc:/postgres/etc"
+      - "db.var:/postgres/var"
+      - "db.backup:/postgres/backup"
     tmpfs:
       # needed for read-only
       - "/postgres/run:uid=1000,gid=1000"
@@ -91,7 +91,6 @@ volumes:
   db.etc:
   db.var:
   db.backup:
-  db.cmd:
 
 networks:
   frontend:
@@ -151,4 +150,4 @@ docker pull quay.io/11notes/pocket-id:1.6.1
 # ElevenNotes™️
 This image is provided to you at your own risk. Always make backups before updating an image to a different version. Check the [releases](https://github.com/11notes/docker-pocket-id/releases) for breaking changes. If you have any problems with using this image simply raise an [issue](https://github.com/11notes/docker-pocket-id/issues), thanks. If you have a question or inputs please create a new [discussion](https://github.com/11notes/docker-pocket-id/discussions) instead of an issue. You can find all my other repositories on [github](https://github.com/11notes?tab=repositories).
 
-*created 08.07.2025, 07:39:20 (CET)*
+*created 09.07.2025, 13:56:49 (CET)*
