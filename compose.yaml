@@ -26,13 +26,17 @@ services:
         condition: "service_healthy"
         restart: true
     read_only: true
-    image: "11notes/pocket-id:1.6.1"
+    image: "11notes/pocket-id:1.6.3"
     environment:
       TZ: "Europe/Zurich"
       APP_URL: "${FQDN}"
       TRUST_PROXY: true
       DB_PROVIDER: "postgres"
       DB_CONNECTION_STRING: "postgres://postgres:${POSTGRES_PASSWORD}@db:5432/postgres"
+      # Use the following environment when not using PostgreSQL.
+      # And remove the 'depends_on' from this service.
+      # DB_PROVIDER: "sqlite"
+      # DB_CONNECTION_STRING: "file:/pocket-id/var/pocket-id.db?_pragma=journal_mode(WAL)&_pragma=busy_timeout(2500)&_txlock=immediate"
     volumes:
       - "pocket-id.var:/pocket-id/var"
     ports:
