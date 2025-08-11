@@ -3,7 +3,7 @@
   "name": "pocket-id",
   "root": "/pocket-id",
   "semver": {
-    "version": "1.6.3"
+    "version": "1.7.0"
   },
   "readme": {
     "description": "Run pocket-id rootless and distroless.",
