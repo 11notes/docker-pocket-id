@@ -16,7 +16,7 @@
 # ║                       BUILD                         ║
 # ╚═════════════════════════════════════════════════════╝
 # :: POCKET-ID
-  FROM golang:1.24-alpine AS build
+  FROM 11notes/go:1.24 AS build
   ARG APP_VERSION \
       BUILD_SRC \
       BUILD_ROOT \
@@ -26,6 +26,7 @@
     apk --update --no-cache add \
       nodejs \
       npm \
+      pnpm \
       yarn;
 
   RUN set -ex; \
@@ -33,7 +34,7 @@
 
   RUN set -ex; \
     cd ${BUILD_ROOT}/frontend; \
-    npm ci; \
+    pnpm install; \
     BUILD_OUTPUT_PATH=dist npm run build;
 
   RUN set -ex; \
