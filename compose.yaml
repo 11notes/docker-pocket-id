@@ -1,23 +1,22 @@
 name: "idp"
 services:
-  db:
+  postgres:
+    # detailed info about this image: https://github.com/11notes/docker-postgres
     image: "11notes/postgres:16"
-    read_only: true
+    <<: *lockdown
     environment:
       TZ: "Europe/Zurich"
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      # make a full and compressed database backup each day at 03:00
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
       POSTGRES_BACKUP_SCHEDULE: "0 3 * * *"
-    networks:
-      backend:
     volumes:
-      - "db.etc:/postgres/etc"
-      - "db.var:/postgres/var"
-      - "db.backup:/postgres/backup"
+      - "postgres.etc:/postgres/etc"
+      - "postgres.var:/postgres/var"
+      - "postgres.backup:/postgres/backup"
     tmpfs:
-      # needed for read-only
       - "/postgres/run:uid=1000,gid=1000"
       - "/postgres/log:uid=1000,gid=1000"
+    networks:
+      backend:
     restart: "always"
 
   pocket-id:
@@ -32,7 +31,7 @@ services:
       APP_URL: "${FQDN}"
       TRUST_PROXY: true
       DB_PROVIDER: "postgres"
-      DB_CONNECTION_STRING: "postgres://postgres:${POSTGRES_PASSWORD}@db:5432/postgres"
+      DB_CONNECTION_STRING: "postgres://postgres:${POSTGRES_PASSWORD}@postgres:5432/postgres"
       # DB_CONNECTION_STRING: "file:/pocket-id/var/pocket-id.db?_pragma=journal_mode(WAL)&_pragma=busy_timeout(2500)&_txlock=immediate"
     volumes:
       - "pocket-id.var:/pocket-id/var"
@@ -44,10 +43,10 @@ services:
     restart: "always"
 
 volumes:
+  postgres.etc:
+  postgres.var:
+  postgres.backup:
   pocket-id.var:
-  db.etc:
-  db.var:
-  db.backup:
 
 networks:
   frontend:
