@@ -1,4 +1,12 @@
 name: "idp"
+
+x-lockdown: &lockdown
+  # prevents write access to the image itself
+  read_only: true
+  # prevents any process within the container to gain more privileges
+  security_opt:
+    - "no-new-privileges=true"
+
 services:
   postgres:
     # detailed info about this image: https://github.com/11notes/docker-postgres
@@ -21,11 +29,11 @@ services:
 
   pocket-id:
     depends_on:
-      db:
+      postgres:
         condition: "service_healthy"
         restart: true
-    read_only: true
-    image: "11notes/pocket-id:1.6.4"
+    image: "11notes/pocket-id:1.7.0"
+    <<: *lockdown
     environment:
       TZ: "Europe/Zurich"
       APP_URL: "${FQDN}"
