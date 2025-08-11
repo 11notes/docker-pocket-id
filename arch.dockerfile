@@ -1,39 +1,35 @@
 # ╔═════════════════════════════════════════════════════╗
 # ║                       SETUP                         ║
 # ╚═════════════════════════════════════════════════════╝
-  # GLOBAL
+# GLOBAL
   ARG APP_UID=1000 \
       APP_GID=1000 \
-      BUILD_SRC=https://github.com/pocket-id/pocket-id.git \
+      BUILD_SRC=pocket-id/pocket-id.git \
       BUILD_ROOT=/go/pocket-id 
   ARG BUILD_BIN=${BUILD_ROOT}/backend/pocket-id
 
-  # :: FOREIGN IMAGES
+# :: FOREIGN IMAGES
   FROM 11notes/distroless AS distroless
-  FROM 11notes/util:bin AS util-bin
   FROM 11notes/util AS util
 
 # ╔═════════════════════════════════════════════════════╗
 # ║                       BUILD                         ║
 # ╚═════════════════════════════════════════════════════╝
-  # :: pocket-id
+# :: POCKET-ID
   FROM golang:1.24-alpine AS build
-  COPY --from=util-bin / /
   ARG APP_VERSION \
       BUILD_SRC \
       BUILD_ROOT \
-      BUILD_BIN \
-      CGO_ENABLED=0
+      BUILD_BIN
 
   RUN set -ex; \
     apk --update --no-cache add \
       nodejs \
       npm \
-      yarn \
-      git;
+      yarn;
 
   RUN set -ex; \
-    git clone ${BUILD_SRC} -b v${APP_VERSION};
+    eleven git clone ${BUILD_SRC} v${APP_VERSION};
 
   RUN set -ex; \
     cd ${BUILD_ROOT}/frontend; \
@@ -52,14 +48,13 @@
   FROM alpine AS file-system
   COPY --from=util / /
   ARG APP_ROOT
-  USER root
   RUN set -ex; \
     eleven mkdir /distroless${APP_ROOT}/var/{uploads,keys,geolite};
 
 # ╔═════════════════════════════════════════════════════╗
 # ║                       IMAGE                         ║
 # ╚═════════════════════════════════════════════════════╝
-  # :: HEADER
+# :: HEADER
   FROM scratch
 
   # :: default arguments
