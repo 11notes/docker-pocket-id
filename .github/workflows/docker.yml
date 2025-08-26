@@ -168,7 +168,7 @@ jobs:
                   sanitized:"${{ matrix.platform }}".replace(/[^A-Z-a-z0-9]+/i, ""),
                 },
                 tags:[],
-                build:(opt.input?.build?.cache === undefined) ? false : opt.input.build.cache,
+                build:(opt.input?.build === undefined) ? false : opt.input.build,
               },
               app:{
                 image:opt.dot.image,
