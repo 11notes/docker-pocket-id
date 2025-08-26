@@ -16,7 +16,7 @@
 # ║                       BUILD                         ║
 # ╚═════════════════════════════════════════════════════╝
 # :: POCKET-ID
-  FROM 11notes/go:1.24 AS build
+  FROM 11notes/go:1.25 AS build
   ARG APP_VERSION \
       BUILD_SRC \
       BUILD_ROOT \
@@ -45,7 +45,7 @@
   RUN set -ex; \
     eleven distroless ${BUILD_BIN};
 
-  # :: file system
+# :: FILE SYSTEM
   FROM alpine AS file-system
   COPY --from=util / /
   ARG APP_ROOT
