@@ -32,7 +32,7 @@ services:
       postgres:
         condition: "service_healthy"
         restart: true
-    image: "11notes/pocket-id:1.13.1"
+    image: "11notes/pocket-id:1.14.0"
     <<: *lockdown
     environment:
       TZ: "Europe/Zurich"
