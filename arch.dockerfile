@@ -2,8 +2,9 @@
 # ║                       SETUP                         ║
 # ╚═════════════════════════════════════════════════════╝
 # GLOBAL
-  ARG APP_UID=1000 \
-      APP_GID=1000 \
+  ARG APP_UID= \
+      APP_GID= \
+      APP_GO_VERSION= \
       BUILD_SRC=pocket-id/pocket-id.git \
       BUILD_ROOT=/go/pocket-id 
   ARG BUILD_BIN=${BUILD_ROOT}/backend/pocket-id
@@ -16,7 +17,7 @@
 # ║                       BUILD                         ║
 # ╚═════════════════════════════════════════════════════╝
 # :: POCKET-ID
-  FROM 11notes/go:1.25 AS build
+  FROM 11notes/go:${APP_GO_VERSION} AS build
   ARG APP_VERSION \
       BUILD_SRC \
       BUILD_ROOT \
@@ -35,7 +36,7 @@
   RUN set -ex; \
     cd ${BUILD_ROOT}/frontend; \
     pnpm install; \
-    BUILD_OUTPUT_PATH=dist npm run build;
+    BUILD_OUTPUT_PATH=dist pnpm run build;
 
   RUN set -ex; \
     cd ${BUILD_ROOT}/backend/cmd; \
