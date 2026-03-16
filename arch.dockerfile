@@ -4,7 +4,7 @@
 # GLOBAL
   ARG APP_UID= \
       APP_GID= \
-      APP_GO_VERSION= \
+      APP_GO_VERSION=0.0 \
       BUILD_SRC=pocket-id/pocket-id.git \
       BUILD_ROOT=/go/pocket-id 
   ARG BUILD_BIN=${BUILD_ROOT}/backend/pocket-id
