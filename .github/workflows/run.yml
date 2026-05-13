@@ -33,12 +33,18 @@ jobs:
 
       - name: get latest version and last tag
         run: |
-          export LATEST_VERSION=$(curl -s https://api.github.com/repos/pocket-id/pocket-id/releases/latest | jq -r '.tag_name' | sed 's|v||')
-          export LATEST_TAG=$(git describe --abbrev=0 --tags `git rev-list --tags --max-count=1` | sed 's|v||')
-          echo "WORKFLOW_UPDATE_BASE64JSON=$(echo '{"version":"'${LATEST_VERSION}'", "tag":"'${LATEST_TAG}'", "unraid":true, "nobody":true}' | base64 -w 0)" >> "${GITHUB_ENV}"
+          LATEST_VERSION=$(curl -s https://api.github.com/repos/pocket-id/pocket-id/releases/latest | jq -r '.tag_name' | sed 's|v||')
+          if [ "${LATEST_VERSION}" != "null" ]; then
+            if ! curl -kILs --fail https://hub.docker.com/v2/repositories/11notes/netbird/tags/${LATEST_VERSION}; then
+              LATEST_TAG=$(git describe --abbrev=0 --tags `git rev-list --tags --max-count=1` | sed 's|v||')
+              echo "WORKFLOW_UPDATE_BASE64JSON=$(echo '{"version":"'${LATEST_VERSION}'", "tag":"'${LATEST_TAG}'", "unraid":true, "nobody":true}' | base64 -w 0)" >> "${GITHUB_ENV}"
+              echo "WORKFLOW_UPDATE=true" >> "${GITHUB_ENV}"
+            fi
+          fi
 
       - name: call org.update
-        uses: the-actions-org/workflow-dispatch@3133c5d135c7dbe4be4f9793872b6ef331b53bc7
+        if: env.WORKFLOW_UPDATE == 'true'
+        uses: benc-uk/workflow-dispatch@7a027648b88c2413826b6ddd6c76114894dc5ec4 #v1.3.1
         with:
           wait-for-completion: false
           workflow: org.update.yml
