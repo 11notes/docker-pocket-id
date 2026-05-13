@@ -35,7 +35,7 @@ jobs:
         run: |
           LATEST_VERSION=$(curl -s https://api.github.com/repos/pocket-id/pocket-id/releases/latest | jq -r '.tag_name' | sed 's|v||')
           if [ "${LATEST_VERSION}" != "null" ]; then
-            if ! curl -kILs --fail https://hub.docker.com/v2/repositories/11notes/netbird/tags/${LATEST_VERSION}; then
+            if ! curl -kILs --fail https://hub.docker.com/v2/repositories/11notes/pocket-id/tags/${LATEST_VERSION}; then
               LATEST_TAG=$(git describe --abbrev=0 --tags `git rev-list --tags --max-count=1` | sed 's|v||')
               echo "WORKFLOW_UPDATE_BASE64JSON=$(echo '{"version":"'${LATEST_VERSION}'", "tag":"'${LATEST_TAG}'", "unraid":true, "nobody":true}' | base64 -w 0)" >> "${GITHUB_ENV}"
               echo "WORKFLOW_UPDATE=true" >> "${GITHUB_ENV}"
